@@ -35,20 +35,20 @@ def user_page(user_id):
 
 
 @app.route('/<user_id>/new')
-def new_book():
+def new_book(user_id):
     """ 새 책 등록: 폼 출력 """
-    # template('new_book.tpl')
+    return template('user_new_book_form.tpl', title='새 책 등록')
     pass
 
 
 @app.route('/<user_id>/new', method='post')
-def save_new_book():
+def save_new_book(user_id):
     """ 새 책 등록 : 저장 """
     pass
 
 
 @app.route('/<user_id>/b')
-def user_books():
+def user_books(user_id):
     """ 전체 작품 목록  """
     pass
 
@@ -74,7 +74,7 @@ def save_modified_book(user_id, book_num):
 @app.route('/<user_id>/b/<book_num:int>/new')
 def new_story(user_id, book_num):
     """ 새 글 등록: 폼 출력 """
-    pass
+    return template('user_new_story_form.tpl', title='새 글 등록')
 
 
 @app.route('/<user_id>/b/<book_num:int>/new', method='post')
