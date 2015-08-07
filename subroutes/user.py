@@ -10,7 +10,7 @@ handling requests from '/u'
 
 """
 
-from bottle import Bottle, redirect, template
+from bottle import Bottle, redirect, request, template
 
 app = Bottle()
 
@@ -44,6 +44,16 @@ def new_book(user_id):
 @app.route('/<user_id>/new', method='post')
 def save_new_book(user_id):
     """ 새 책 등록 : 저장 """
+    title = request.forms.get('b_title')
+    type = request.forms.get('b_type')
+    public = request.forms.get('b_public')
+    keywords = request.forms.get('b_keywords')
+    intro = request.forms.get('b_intro')
+
+    if not title or not type or not public:
+        # 잘못된 접근이므로, 사용자 페이지로 돌려보낸다
+        pass
+
     pass
 
 
@@ -80,6 +90,14 @@ def new_story(user_id, book_num):
 @app.route('/<user_id>/b/<book_num:int>/new', method='post')
 def save_new_story(user_id, book_num):
     """ 새 글 등록: 저장 """
+    title = request.forms.get('s_title')
+    text = request.forms.get('s_text')
+    public = request.forms.get('s_public')
+
+    if not text:
+        # 글 내용이 없므로, 책 페이지로 돌려보낸다
+        pass
+
     pass
 
 

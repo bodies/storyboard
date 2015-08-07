@@ -3,12 +3,12 @@
         <table>
           <tr>
             <td>소제목</td>
-            <td><input type="text" name="story_name" /></td>
+            <td><input type="text" name="s_title" /></td>
           </tr>
           <tr>
             <td>본문</td>
             <td>
-              <textarea name="story_story"></textarea>
+              <textarea name="s_text"></textarea>
             </td>
           </tr>
           <tr>

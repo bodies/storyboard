@@ -8,8 +8,8 @@
           <tr>
             <td>분류</td>
             <td>
-              <input type="radio" name="b_type" value="단편" /> 단편
-              <input type="radio" name="b_type" value="연재물" checked="checked" /> 연재물
+              <input type="radio" name="b_type" value="short" /> 단편
+              <input type="radio" name="b_type" value="series" checked="checked" /> 연재물
             </td>
           </tr>
           <tr>

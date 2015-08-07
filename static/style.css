@@ -2,5 +2,17 @@
 
 body {
     font-size: 13px;
-    font-family: "Malgun Gothic", NanumGothic, sans-serif;
+    font-family: NanumGothic, sans-serif;
 }
+
+#login, #register {
+    width: 300px;
+    margin: auto;
+    padding: 8% 0 0;
+}
+
+#login table tr, #register table tr {
+    height:40px;
+}
+
+#logout { padding:1em; }
