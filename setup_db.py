@@ -12,7 +12,7 @@
         또는 사용자에게 삭제 권한 대신, 비공개 권한만 주는 건 어떨까?
 """
 
-import mysql.connector
+import mysql.connector as conn
 from mysql.connector import errorcode
 from config_db import *
 
@@ -106,9 +106,9 @@ TABLES['tag_links'] = (
 
 # DB 접속
 try:
-    cnx = mysql.connector.connect(user=DB_USER, password=DB_PASSWORD,
-                                  host=DB_HOST, database=DB_NAME, port=DB_PORT)
-except mysql.connector.Error as e:
+    cnx = conn.connect(user=DB_USER, password=DB_PASSWORD,
+                       host=DB_HOST, database=DB_NAME, port=DB_PORT)
+except conn.Error as e:
     print("DB 접속 실패!: ", e.msg)
     exit()
 else:
@@ -119,7 +119,7 @@ for name, query in TABLES.items():
     try:
         print('테이블 {} 생성 중... '.format(name), end='')
         cursor.execute(query)
-    except mysql.connector.Error as e:
+    except conn.Error as e:
         if e.errno == errorcode.ER_TABLE_EXISTS_ERROR:
             print('이미 존재합니다!')
         else:

@@ -5,13 +5,13 @@ body {
     font-family: NanumGothic, sans-serif;
 }
 
-#login, #register {
+#login, #join {
     width: 300px;
     margin: auto;
     padding: 8% 0 0;
 }
 
-#login table tr, #register table tr {
+#login table tr, #join table tr {
     height:40px;
 }
 
