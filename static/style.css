@@ -1,18 +1,43 @@
 @charset "utf-8";
 
+* { margin: 0; padding: 0;}
+
 body {
     font-size: 13px;
     font-family: NanumGothic, sans-serif;
 }
 
-#login, #join {
-    width: 300px;
-    margin: auto;
-    padding: 8% 0 0;
+
+/* ----- LOGIN FORM ----- */
+
+#login {
+    max-width: 280px;
+    margin: 80px auto;
 }
 
-#login table tr, #join table tr {
-    height:40px;
+#form-login {
+    padding: 10px 15px 0 15px;
+    margin-bottom: -10px;   /* form-group의 margin-bottom 때문에 */
 }
 
-#logout { padding:1em; }
+#form-login .col-remember, #form-login .col-btn {
+    padding-left: 1px;
+    padding-right: 0;
+}
+#form-login .col-remember span { color: #666; font-weight: normal; font-size: 0.9em;}
+#form-login .col-btn button { float: right; }
+
+
+/* ----- JOIN FORM ----- */
+
+#join {
+    max-width: 340px;
+    margin: 80px auto;
+}
+
+#form-join {
+    padding: 10px 15px 0 15px;
+    margin-bottom: -10px;
+}
+
+#form-join .join-btn { float:right; }
