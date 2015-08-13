@@ -65,6 +65,7 @@ TABLES['story_data'] = (
 # 사용자 정보
 # password는 일단 보통 텍스트로 저장하고, 나중에 sha256을 적용할 것. (salt도 고려할 것)
 # MySQL의 SHA2 함수 참고할 것.
+# level 0은 관리자
 TABLES['users'] = (
     "CREATE TABLE users ("
     " num mediumint UNSIGNED NOT NULL AUTO_INCREMENT,"
