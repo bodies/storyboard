@@ -6,21 +6,27 @@ handling requests from '/u'
 
 """
     TO-DOs:
-    1) 로그인 확인: 반복되는 공통 작업을 간단하고 직관적으로!
+    1) 로그인 확인
+       반복되는 공통 작업을 간단하고 직관적으로!
 
 """
 
 from bottle import Bottle, redirect, request, template
+import session_control as s
+import member
 
 app = Bottle()
-
 
 # ----- ROUTING ----- #
 
 
 @app.route('/')
 def show_user_page():
-    pass
+    print("USER PAGE")
+    data = s.data()
+    print(data)
+    for k, v in data.items():
+        print("SESSIONED DATA: ", k, v)
 
 
 @app.route('/<user_id>')
@@ -31,6 +37,43 @@ def user_page(user_id):
     2. 사용자 정보 & 최근 작품 목록 출력
     3. 로그인 중이라면, 정보 수정, 새 작품 쓰기, 작품 수정 등 기능 제공
     """
+
+    data = s.data()
+    print(data)
+    for k, v in data.items():
+        print("SESSIONED DATA: ", k, v)
+
+    return '<a href="/u/{}/update_user">사용자 정보 수정</a>'.format(user_id)
+
+
+@app.route('/<user_id>/update_user')
+def update_user(user_id):
+    # 한번 더 암호 묻기
+    # TODO: 로그인 여부 확인! (세션 데이터가 없으면 템플릿에서 에러 발생!)
+    try:
+        info = {}
+        m = member.Member()
+        extra_info = m.extra_info(user_id)
+        sessioned_data = s.data()
+        for k, v in sessioned_data.items():
+            info[k] = v
+        info['email'] = extra_info[0]
+        info['intro'] = extra_info[1]
+        print('INFO: ', info)
+
+        return template('user_info_form.tpl', title='사용자 정보 수정', info=info)
+    except Exception as e:
+        print(e.args[1])
+        return template('error_popup.tpl', err_msg="사용자 정보를 갱신할 수 없습니다.")
+
+
+@app.route('/<user_id>/update_user', method='post')
+def do_update_user(user_id):
+    request.forms.get('name', None)
+    request.forms.get('email', None)
+    request.forms.get('password', None)
+    request.forms.get('password2', None)
+    request.forms.get('intro', None)
     pass
 
 

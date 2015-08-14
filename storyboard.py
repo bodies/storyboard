@@ -27,17 +27,24 @@ session_opts = {
 # ----- ROUTING ----- #
 
 app = Bottle()
-sessioned_app = SessionMiddleware(app, session_opts)
 
 app.mount('/b', book.app)
 app.mount('/s', story.app)
 app.mount('/u', user.app)
-app.mount('/adm', admin.app)
+app.mount('/admin', admin.app)
+
+sessioned_app = SessionMiddleware(app, session_opts)
 
 
 @app.route('/')
 def main():
     # 최종적으로는 최근 글, 추천 글등을 보여주는 홈페이지 역할
+
+    data = s.data()
+    print(data)
+    for k, v in data.items():
+        print("SESSIONED DATA: ", k, v)
+
     return "메인 페이지"
 
 
@@ -55,16 +62,25 @@ def do_login():
     id = html_escape(request.forms.get('id', '').strip())
     passwd = request.forms.get('password', '').strip()
     remember = True if request.forms.get('remember') else False
-    dest = request.forms.get('dest', '/').strip()
+    # dest = request.forms.get('dest', '/u/{}'.format(id)).strip()
+    dest = '/'
+    print(dest)
 
     if not id or not passwd:
         # 정보가 안 넘어왔을 경우, 팝업으로 경고 후, 로그인 폼으로..
         redirect('/login')
-
-    tmp = 'id: {}<br />passwd: {}<br />remember: {}<br />dest: {}'.format(id, passwd, remember, dest)
-
-    return tmp
-    # redirect(dest)
+    try:
+        user_info = m.login(id, passwd)
+        print('USER_INFO: ', user_info[0])
+        if user_info:
+            s.login(user_info[0], user_info[1], user_info[2], user_info[3])
+        else:
+            return template('error_popup.tpl', err_msg='아이디/패스워드가 일치하지 않습니다.')
+    except Exception as e:
+        print(e.args[1])
+        return template('error_popup.tpl', err_msg='일시적인 장애로 로그인할 수 없습니다')
+    else:
+        redirect(dest)
 
 
 @app.route('/logout')
@@ -129,7 +145,8 @@ def do_join():
     else:
         # 가입 절차 완료
         # TODO: 가입 환영 메시지 출력 + 사용자 페이지로 이동
-        redirect('/u/{}'.format(id))
+        # redirect('/u/{}'.format(id))
+        redirect('/login')
         print('가입 완료')
 
 

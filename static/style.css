@@ -30,14 +30,25 @@ body {
 
 /* ----- JOIN FORM ----- */
 
-#join {
+#join, #user-info-update {
     max-width: 340px;
     margin: 80px auto;
 }
 
-#form-join {
+#form-join, #form-user-info {
     padding: 10px 15px 0 15px;
     margin-bottom: -10px;
 }
 
-#form-join .join-btn { float:right; }
+.join-btn { float:right; }
+
+
+/* ----- USER LIST (ADMIN) ----- */
+#user-list {
+    max-width: 640px;
+    margin: 20px auto;
+}
+
+#user-list table {
+    font-size:13px;
+}
