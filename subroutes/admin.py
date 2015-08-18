@@ -33,8 +33,12 @@ def show_user_list():
     return template('admin_user_list.tpl', title='사용자 목록', ls=ls)
 
 
-@app.route('/u/update_user')
+@app.route('/update_user')
 def update_user():
+    num = request.query.get('num')
+    if not num:
+        redirect('/admin/users')
+    m.extra_info()
     return template('user_info_form.tpl', title='사용자 정보 수정')
 
 

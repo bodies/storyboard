@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
     Story Board
 """
@@ -39,46 +41,39 @@ sessioned_app = SessionMiddleware(app, session_opts)
 @app.route('/')
 def main():
     # 최종적으로는 최근 글, 추천 글등을 보여주는 홈페이지 역할
-
-    data = s.data()
-    print(data)
-    for k, v in data.items():
-        print("SESSIONED DATA: ", k, v)
-
-    return "메인 페이지"
+    return template('main.tpl', title='메인 페이지',
+        logged=s.is_logged(), member=s.data())
 
 
 @app.route('/login')
 def login_form():
     if s.is_logged():
         # 이미 로그인했으면 사용자 페이지로
-        redirect('/u')
+        return template('popup.tpl', msg='이미 로그인 중입니다.')
     return template('login_form.tpl', title='로그인', action='/login')
 
 
 @app.route('/login', method='post')
 def do_login():
 
-    id = html_escape(request.forms.get('id', '').strip())
-    passwd = request.forms.get('password', '').strip()
-    remember = True if request.forms.get('remember') else False
-    # dest = request.forms.get('dest', '/u/{}'.format(id)).strip()
-    dest = '/'
-    print(dest)
+    id = html_escape(request.forms.getunicode('id', '').strip())
+    passwd = request.forms.getunicode('password', '').strip()
+    remember = True if request.forms.getunicode('remember') else False
+    dest = request.forms.getunicode('dest', '/u/{}'.format(id)).strip()
 
     if not id or not passwd:
         # 정보가 안 넘어왔을 경우, 팝업으로 경고 후, 로그인 폼으로..
         redirect('/login')
     try:
         user_info = m.login(id, passwd)
-        print('USER_INFO: ', user_info[0])
+        print('USER_INFO: ', user_info)
         if user_info:
             s.login(user_info[0], user_info[1], user_info[2], user_info[3])
         else:
-            return template('error_popup.tpl', err_msg='아이디/패스워드가 일치하지 않습니다.')
+            return template('popup.tpl', msg='아이디/패스워드가 일치하지 않습니다.')
     except Exception as e:
-        print(e.args[1])
-        return template('error_popup.tpl', err_msg='일시적인 장애로 로그인할 수 없습니다')
+        print(e)
+        return template('popup.tpl', msg='일시적인 장애로 로그인할 수 없습니다')
     else:
         redirect(dest)
 
@@ -106,13 +101,14 @@ def do_join():
         # 회원가입 실패 시, 발생시킬 예외
         def __init__(self, value):
             self.value = value
+        # request.forms.decode('utf-8')
 
     try:
-        id = html_escape(request.forms.get('id', '').strip())
-        name = html_escape(request.forms.get('name', '').strip())
-        email = html_escape(request.forms.get('email', '').strip())
-        passwd = request.forms.get('password', '').strip()
-        passwd2 = request.forms.get('password2', '').strip()
+        id = html_escape(request.forms.getunicode('id', '').strip())
+        name = html_escape(request.forms.getunicode('name', '').strip())
+        email = html_escape(request.forms.getunicode('email', '').strip())
+        passwd = request.forms.getunicode('password', '').strip()
+        passwd2 = request.forms.getunicode('password2', '').strip()
 
         if not id or not name or not email or not passwd or not passwd2:
             raise JoinError('가입 정보가 부족합니다.')
@@ -135,12 +131,12 @@ def do_join():
         m.register(id, name, email, passwd)
 
     except JoinError as e:
-        return template('error_popup.tpl', err_msg=e.value)
+        return template('popup.tpl', msg=e.value)
 
     except Exception as e:
         # return template('error_popup.tpl',
                         # err_msg='사용자 등록에 실패했습니다. 잠시 후 다시 시도해주세요.')
-        return template('error_popup.tpl', err_msg=e.args[1])
+        return template('popup.tpl', msg=e.args[1])
 
     else:
         # 가입 절차 완료
@@ -160,6 +156,19 @@ def error404(error):
     # TO-DO: 제대로 된 404 대응 페이지 만들 것!
 
     return "Nothing Here..."
+
+
+@app.route('/test')
+def test():
+    return template('test.tpl', title='테스트 페이지')
+
+
+@app.route('/test', method='post')
+def do_test():
+    # request.forms.recode_unicode = False
+    print(request.forms.getunicodeunicode('abc'))
+    pass
+
 
 # ----- END OF ROUTING ----- #
 

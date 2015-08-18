@@ -7,9 +7,18 @@
 from bottle import request
 
 
-def is_logged():
+def is_logged(id=None):
+    # 로그인 여부 확인
+    # id가 넘어오면, 그 id로 로그인 중인 확인
     s = request.environ.get('beaker.session')
-    return True if 'user_id' in s else False
+    if 'user_id' not in s:
+        return False
+    elif not id:
+        return True
+    elif id == s['user_id']:
+        return True
+    else:
+        return False
 
 
 def is_admin():
@@ -25,11 +34,19 @@ def login(num, id, name, level):
     s['user_num'] = num
     s['user_name'] = name
     s['level'] = level
+    print('SESSION OK!')
 
 
-def data():
+def data(key=None):
+    # 세션 데이터 접근용 객체를 반환
+    # key값을 지정하면 해당 세션 데이터값만 반환
     s = request.environ.get('beaker.session')
-    return s
+    if not key:
+        return s
+    elif key in s:
+        return s[key]
+    else:
+        return None
 
 
 def logout():

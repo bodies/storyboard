@@ -5,7 +5,7 @@
             <h3 class="panel-title">회원 가입</h3>
           </div>
           <div class="panel-body">
-            <form id="form-join" method="post" action="/join">
+            <form id="form-join" method="post" action="/join" accept-charset="utf-8">
               <div class="form-group form-group-sm">
                 <label for="inputId" class="sr-only">아이디</label>
                 <input type="text" class="form-control" id="inputId" name="id" placeholder="아이디" />
